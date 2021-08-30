@@ -9,19 +9,19 @@ import com.ogong.service.domain.User;
 
 public interface BananaService {
 
-	// 바나나 인서트
+	// 바나나 지급
 	public void addBanana(Banana banana) throws Exception;
 	
-	// 획득처 리스트
+	// 획득,소모처 목록
 	public Map<String, Object> getlistBanana(HashMap<String, Object> map) throws Exception;
 	
-	// 바나나 - 빼기
+	// 바나나 + 획득
 	public void updateAcquireBanana(User user) throws Exception;	
 	
-	// 바나나 - 빼기
+	// 바나나 - 사용
 	public void updateUseBanana(User user) throws Exception;
 	
-	// 바나나 리스트 삭제
+	// 바나나 목록 삭제
 	public void deleteBanana(int bananaNo) throws Exception;
 	
 	// 유저 정보

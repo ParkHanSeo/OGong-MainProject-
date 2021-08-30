@@ -29,7 +29,6 @@ img {
 div#container {
 	margin-top: 50px;
 }
-
 </style>
 
 <script type="text/javascript">

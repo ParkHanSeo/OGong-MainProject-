@@ -32,24 +32,36 @@
 	</resultMap>
 	
 	<resultMap id="UserSelectMap" type="user">
-		<result property="email"						 column="EMAIL"				 jdbcType="VARCHAR"/>
-		<result property="condition"					 column="CONDITION"			 jdbcType="VARCHAR"/>
-		<result property="nickname"					   	 column="NICKNAME"			 jdbcType="VARCHAR"/>
-		<result property="withdrawDate"					 column="WITHDRAW_DATE"		 jdbcType="DATE"/>
-		<result property="withdrawReason"				 column="WITHDRAW_REASON"	 jdbcType="VARCHAR"/>
-		<result property="restoreDate"					 column="RESTORE_DATE"		 jdbcType="DATE"/>
-		<result property="restoreReason"				 column="RESTORE_REASON"	 jdbcType="VARCHAR"/>
-		<result property="userTargetTime"				 column="USER_TARGET_TIME"	 jdbcType="NUMERIC"/>
-		<result property="regDate"						 column="REG_DATE"			 jdbcType="VARCHAR"/>
-		<result property="suspendStartDate"				 column="SUSPEND_START_DATE" jdbcType="DATE"/>
-		<result property="suspendEndDate"				 column="SUSPEND_END_DATE"   jdbcType="DATE"/>
-		<result property="bananaCount"					 column="BANANA_COUNT"		 jdbcType="NUMERIC"/>
+		<result property="email" 				column="email" 				jdbcType="VARCHAR"/>
+		<result property="role"					column="role" 				jdbcType="VARCHAR" />
+		<result property="condition" 			column="condition" 			jdbcType="VARCHAR" />
+		<result property="nickname" 			column="nickname" 			jdbcType="VARCHAR" />
+		<result property="password" 			column="password" 			jdbcType="VARCHAR" />
+		<result property="name" 				column="name" 				jdbcType="VARCHAR" />
+		<result property="birth" 				column="birth" 				jdbcType="DATE" />
+		<result property="gender" 				column="gender" 			jdbcType="VARCHAR"  />
+		<result property="userImage" 			column="user_image" 		jdbcType="VARCHAR" />
+		<result property="goal" 				column="goal" 				jdbcType="VARCHAR" />
+		<result property="withdrawDate" 		column="withdraw_date" 		jdbcType="DATE" />
+		<result property="withdrawReason" 		column="withdraw_reason" 	jdbcType="VARCHAR" />
+		<result property="restoreDate" 			column="restore_date" 		jdbcType="DATE" />
+		<result property="restoreReason" 		column="restore_reason" 	jdbcType="VARCHAR" />
+		<result property="diligenceRate" 		column="diligence_rate" 	jdbcType="NUMERIC" />
+		<result property="participationRate" 	column="participation_rate" jdbcType="NUMERIC" />
+		<result property="suspendStartDate" 	column="suspend_start_date" jdbcType="DATE" />
+		<result property="suspendEndDate" 		column="suspend_end_date" 	jdbcType="DATE" />
+		<result property="userTargetTime" 		column="user_target_time" 	jdbcType="NUMERIC" />
+		<result property="regDate" 				column="reg_date" 			jdbcType="DATE" />
+		<result property="bananaCount" 			column="banana_count" 		jdbcType="NUMERIC" />
+		<result property="studyInterest1" 		column="study_interest1" 	jdbcType="VARCHAR" />
+		<result property="studyInterest2" 		column="study_interest2" 	jdbcType="VARCHAR" />
+		<result property="studyInterest3" 		column="study_interest3" 	jdbcType="VARCHAR" />
 	</resultMap> 
 	
 	<resultMap id="AnswerSelectMap" type="answer">
 		<result property="answerNo"						 column="ANSWER_NO"			 jdbcType="NUMERIC"/>
-		<result property="answerWriter.email" 			 column="EMAIL" 			 jdbcType="VARCHAR"/>
-		<result property="answerWriter.nickname" 		 column="NICKNAME" 			 jdbcType="VARCHAR"/>
+		<result property="email" 			 			 column="EMAIL" 			 jdbcType="VARCHAR"/>
+		<result property="nickname" 					 column="NICKNAME" 			 jdbcType="VARCHAR"/>
 		<result property="adoptionFlag"					 column="ADOPTION_FLAG" 	 jdbcType="VARCHAR"/>
 		<result property="adoptionCount"				 column="adoption_count" 	 jdbcType="NUMERIC"/>
 	</resultMap>
@@ -133,6 +145,25 @@
 									WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}		
 	</select>
 	
+	<!-- 쪽지보관함 -->
+	<select id="getlistKeepMessage" parameterType="hashmap"	resultMap="MessageSelectMap">
+		SELECT outer_table.*
+		FROM ( SELECT inner_table.* , ROWNUM AS row_seq
+						FROM		( SELECT message_no,
+											 message_contents,
+											 message_category,
+											 sender_email,
+											 receiver_email,
+											 TO_CHAR(send_date,'YYYY-MM-DD') send_date
+											 FROM message
+											 WHERE receiver_email = #{message.receiver.email}
+											 AND   message_category = 3	
+											 ORDER BY send_date	DESC      									
+											 ) inner_table
+						   				WHERE ROWNUM &lt;= #{search.endRowNum}) outer_table
+									WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}		
+	</select>	
+	
 	<!-- 쪽지 삭제 -->	
 	<delete id="deleteMessage"	parameterType="int">
 		DELETE
@@ -140,13 +171,27 @@
 		WHERE message_no = #{value} 
 	</delete>
 	
-	<!-- 쪽지 삭제 테스트 -->
-	<delete id="deleteTest" parameterType="message">
+	<!-- 쪽지 선택 삭제 -->
+	<delete id="deleteChoiceMessage" parameterType="message">
 		DELETE
 		FROM message
 		WHERE message_no = #{messageNo}
 		AND RECEIVER_EMAIL = #{receiver.email}
 	</delete>
+	
+	<!-- 쪽지 보관함 이동 -->
+	<update id="updateKeepMessage" parameterType="int">
+		UPDATE message
+		SET message_category = '3'
+		WHERE message_no = #{messageNo}
+	</update>
+	<!-- 받은 쪽지함 이동 -->
+	<update id="updateReceiveMessage" parameterType="int">
+		UPDATE message
+		SET message_category = '1'
+		WHERE message_no = #{messageNo}
+	</update>	
+	
 	
 	<!-- 바나나 랭킹 목록 -->
 	<select id="listBananaRanking" parameterType="hashmap" resultMap="UserSelectMap">
@@ -235,6 +280,15 @@
 				  )
 	</insert>
 	
+	<!-- 알림 카운트 수 -->
+	<select id="getNoticeCount" parameterType="string" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM notice
+		WHERE email = #{value} 
+		AND notice_condition = '2'
+	</select>	
+		
 	<!-- 알림 목록 -->
 	<select id="getlistNotice" parameterType="string" resultMap="NoticeSelectMap">
 		SELECT 
@@ -275,21 +329,21 @@
 		WHERE email = #{value}
 	</delete>
 	
-	<!-- 알림 카운트 수 -->
-	<select id="getNoticeCount" parameterType="string" resultType="int">
-		SELECT
-		COUNT(*)
-		FROM notice
-		WHERE email = #{value} 
-		AND notice_condition = '2'
-	</select>	
+
 	
+	<!-- 알림 읽음 처리 -->
 	<update id="updateNotice" parameterType="string">
 		UPDATE notice
 		SET notice_condition = '1'
 		WHERE email in (#{email}) AND notice_condition in ('2')
 	</update>
 	
+	<!-- 공부시간 -->
+	<update id="setTargetTime" parameterType="user">
+		UPDATE users
+		SET user_target_time = #{userTargetTime}
+		WHERE email = #{email}
+	</update>	
 	
 	<select id="getTotalCount"		parameterType="hashmap"		resultType="int">
 		SELECT COUNT(*)
@@ -312,11 +366,16 @@
 											 AND   message_category = 2
 											 ) countTable
 	</select>
-
-	<update id="setTargetTime" parameterType="user">
-		UPDATE users
-		SET user_target_time = #{userTargetTime}
-		WHERE email = #{email}
-	</update>
+	<select id="getTotalCount3"		parameterType="hashmap"		resultType="int">
+		SELECT COUNT(*)
+						FROM		( SELECT message_no,
+											 message_contents,
+											 send_date
+											 FROM message
+											 WHERE receiver_email = #{message.receiver.email}
+											 AND   message_category = 3
+											 ) countTable
+	</select>	
+	
 	
 </mapper>

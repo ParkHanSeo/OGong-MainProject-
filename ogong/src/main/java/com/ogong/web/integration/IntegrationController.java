@@ -63,25 +63,6 @@ public class IntegrationController {
 		System.out.println(this.getClass());
 	}
 	
-	/*@GetMapping("addSendMessage")
-	public String addSendMessage(Model model) throws Exception{
-		
-		System.out.println("/integration/addSendMessage : GET");
-		
-		User sender = new User();
-		Message message = new Message();
-		
-		sender.setEmail("user06");
-		message.setSender(sender);
-		
-		model.addAttribute(message);
-		
-		System.out.println(message+"여기는 message");
-		
-		return "/integrationView/addSendMessage";
-		
-	}*/
-	
 	//쪽지 전송을 위한 메소드
 	@PostMapping("addSendMessage")
 	public String addSendMessage( @ModelAttribute("message") Message message,
@@ -96,19 +77,18 @@ public class IntegrationController {
 		System.out.println("message 확인 ::: " +message);
 		System.out.println("session user 확인 :::"+session.getAttribute("user"));
 		
-		// 알림 처리를 위해 알림 insert부터 해 볼까요
+		// 알림 처리를 위한 알림 insert
+		// noticeCategory(7) = 메세지 도착 알림
 		notice.setNoticeUser(message.getReceiver());
 		notice.setSender(user);
 		notice.setNoticeCategory("7");
 		notice.setNoticeCondition("2");
-		
-		
-		
 		integrationService.addNotice(notice);
 		
 		
-		// 이제 쪽지 전송처리를 합시다.
+		// 쪽지 전송처리를 합시다.
 		System.out.println("message : : : "+message);
+		// 쪽지보내기 메소드가 2개인 이유는 보낸사람, 받은사람 목록에 각각 저장시키기 위해
 		integrationService.addSendMessage(message);
 		integrationService.addSendMessage2(message);
 		System.out.println(message.getSender().getEmail());
@@ -116,10 +96,10 @@ public class IntegrationController {
 		return "redirect:/integration/listSendMessage?sender.email="+message.getSender().getEmail();
 	}
 	
-	//받은 쪽지 목록
+	//받은 쪽지 목록 메소드
 	@RequestMapping(value="listSendMessage")
 	public String listSendMessage(@ModelAttribute("search") Search search, HttpSession session,
-									@ModelAttribute("message") Message message, Model model)throws Exception {
+								  @ModelAttribute("message") Message message, Model model)throws Exception {
 
 		int pageSize = 30;
 		int pageUnit = 20;
@@ -129,23 +109,27 @@ public class IntegrationController {
 		User email = (User)session.getAttribute("user");
 		message.setSender(email);
 		
+		//검색
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
 		
+		//HashMap에 저장
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("message", message);
-		
-		System.out.println("message는 이거 :::::"+message);
 		
 		Map<String,Object> result = integrationService.getlistSendMessage(map);
 		List<Object> list = (List<Object>)result.get("list");
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)result.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println("여기는 resultPage " + resultPage);
-				
+		
+		//출력값 확인
+		System.out.println("message : "+message);
+		System.out.println("resultPage : " + resultPage);
+		
+		//model로 담아 return
 		model.addAttribute("list", result.get("list"));
 		model.addAttribute("search", search);
 		model.addAttribute("resultPage", resultPage);
@@ -154,7 +138,7 @@ public class IntegrationController {
 		return "/integrationView/listSendMessage";
 	}
 	
-	//보낸 쪽지 목록
+	//보낸 쪽지 목록 메소드
 	@RequestMapping(value="listReceiveMessage")
 	public String listReceiveMessage(@ModelAttribute("search") Search search, Model model, HttpSession session, Message message  )throws Exception {
 		
@@ -167,16 +151,13 @@ public class IntegrationController {
 		message.setReceiver(email);
 		message.setSender(email);
 		
-		
-		//쪽지 전송으로 session END....		
-		
-		System.out.println("/integration/listReceiveMessage : GET");
-		
+		//검색, 페이지
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
 		
+		//HashMap에 저장
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("message", message);
@@ -185,8 +166,12 @@ public class IntegrationController {
 		List<Object> list = (List<Object>)result.get("list");
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)result.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println("여기는 resultPage " + resultPage);
-				
+		
+		//출력값 확인
+		System.out.println("message : "+message);
+		System.out.println("resultPage : " + resultPage);		
+		
+		//model에 담아 return
 		model.addAttribute("list", result.get("list"));
 		model.addAttribute("search", search);
 		model.addAttribute("resultPage", resultPage);
@@ -195,14 +180,54 @@ public class IntegrationController {
 		return "/integrationView/listReceiveMessage";
 	}
 	
+	//쪽지보관함 메소드
+	@RequestMapping(value="listKeepMessage")
+	public String listKeepMessage(@ModelAttribute("search") Search search, Model model, HttpSession session, Message message  )throws Exception {
+		
+		int pageSize = 30;
+		int pageUnit = 20;
+		
+		System.out.println("/integration/listReceiveMessage : GET");
+		
+		User email = (User)session.getAttribute("user");
+		message.setReceiver(email);
+		message.setSender(email);
+		
+		//검색, 페이지
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
+		search.setPageSize(pageSize);
+		
+		//HashMap에 저장
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("message", message);
+		
+		Map<String,Object> result = integrationService.getlistKeepMessage(map);
+		List<Object> list = (List<Object>)result.get("list");
+		
+		Page resultPage = new Page( search.getCurrentPage(), ((Integer)result.get("totalCount")).intValue(), pageUnit, pageSize);
+		
+		//출력값 확인
+		System.out.println("message : "+message);
+		System.out.println("resultPage : " + resultPage);		
+		
+		//model에 담아 return
+		model.addAttribute("list", result.get("list"));
+		model.addAttribute("search", search);
+		model.addAttribute("resultPage", resultPage);
+		model.addAttribute("message", message);
+		
+		return "/integrationView/listKeepMessage";
+	}	
+	
 	//쪽지 선택삭제
-	@PostMapping("deleteTest")
-	public void deleteTest(@RequestParam(value = "messageNo[]") List<String> messageArr, 
-						  Message message) throws Exception{
+	@PostMapping("deleteChoiceMessage")
+	public void deleteChoiceMessage(@RequestParam(value = "messageNo[]") List<String> messageArr, Message message) throws Exception{
 			
-		System.out.println("테스트 삭제 실행");
-			
-			
+		System.out.println("deleteChoiceMessage");
+
 			User user = new User();
 			
 			message.setReceiver(user);
@@ -218,21 +243,69 @@ public class IntegrationController {
 					   message.setMessageNo(messageNo);
 					   integrationService.deleteMessage(message.getMessageNo());
 				  }
-				  
 				  result = 1;
-					
 			}
 		
+	}
+	
+	//쪽지 보관함 이동
+	@PostMapping("updateKeepMessage")
+	public void updateKeepMessage(@RequestParam(value = "messageNo[]") List<String> messageArr, Message message) throws Exception{
 		
+		System.out.println("updateKeepMessage 시작");
+		
+		User user = new User();
+		
+		message.setReceiver(user);
+		
+		int result = 0;
+		int messageNo = 0;
+		
+		if(user != null) {
+			message.setReceiver(user);
+			
+			for(String i : messageArr) {
+				messageNo = Integer.parseInt(i);
+				message.setMessageNo(messageNo);
+				integrationService.updateKeepMessage(message.getMessageNo());
+			}
+			result = 1;
+		}
 		
 	}
+	
+	//받은 쪽지함 이동
+	@PostMapping("updateReceiveMessage")
+	public void updateReceiveMessage(@RequestParam(value = "messageNo[]") List<String> messageArr, Message message) throws Exception{
+		
+		System.out.println("updateReceiveMessage 시작");
+		
+		User user = new User();
+		
+		message.setReceiver(user);
+		
+		int result = 0;
+		int messageNo = 0;
+		
+		if(user != null) {
+			message.setReceiver(user);
+			
+			for(String i : messageArr) {
+				messageNo = Integer.parseInt(i);
+				message.setMessageNo(messageNo);
+				integrationService.updateReceiveMessage(message.getMessageNo());
+			}
+			result = 1;
+		}
+		
+	}	
 
 	
 	//메인페이지의 필요한 모든 것
 	@GetMapping("mainPage")
 	public String mainPage(Model model, Answer answer, HttpSession session) throws Exception{
 		
-		System.out.println("mainPage 메소드가 실행되는지 확인합시다."); 
+		System.out.println("integration/mainPage 실행"); 
 		
 		User user = (User)session.getAttribute("user");
 		String email = user.getEmail();
@@ -240,12 +313,12 @@ public class IntegrationController {
 		User Newuser = userService.getProfile(email);
 		session.setAttribute("user", Newuser);
 		
-		///////공부시간 및 목표시간
+		//공부시간 및 목표시간
 		int targetTime = Newuser.getUserTargetTime();
 		String todayLearningTime = learningHistoryService.getTodayLearningTime(email);
 		String splitTime[] = todayLearningTime.split(":");
 		String gage = "";
-		//////목표시간 달성률
+		//목표시간 달성률
 		if(targetTime != 0) {
 			Float rate = ((Float.parseFloat(splitTime[0]) * 60) + Float.parseFloat(splitTime[1])) / ((float)targetTime*60) * 100;
 			if(rate > 100) {
@@ -271,7 +344,7 @@ public class IntegrationController {
 		model.addAttribute("mySelfStudyList", mySelfStudyList);
 		model.addAttribute("myGroupStudyList", myGroupStudyList);
 		
-		//////랭킹
+		//랭킹
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<User> banana = integrationService.listBananaRanking(map);
 		List<Answer> choose = integrationService.listChooseCountRanking(map);
@@ -280,7 +353,6 @@ public class IntegrationController {
 		map.put("banana", banana);
 		map.put("choose", choose);
 		map.put("learningTime", learningTime);
-
 		
 		model.addAttribute("user", session.getAttribute("user"));
 		model.addAttribute("list3", map.get("learningTime"));
@@ -290,6 +362,7 @@ public class IntegrationController {
 		return "/index";
 	}
 	
+	//바나나수 랭킹 1위~3위 일주일에 한 번 바나나 지급 메소드
 	//매 주 월요일 자정에 매소드 실행
 	@Scheduled(cron = "0 0 12 ? * MON") 
 	public void bananaAdd() throws Exception{
@@ -334,12 +407,12 @@ public class IntegrationController {
 	
 	}
 	
-	//채택수 랭킹 1위~3위 일주일에 한 번 바나나 지급
+	//채택수 랭킹 1위~3위 일주일에 한 번 바나나 지급 메소드
 	//매 주 월요일 자정에 매소드 실행
 	@Scheduled(cron = "0 0 12 ? * MON")
 	public void chooseAdd() throws Exception{
 		
-		System.out.println("바나나 수 랭킹 일정시간 포인트 지급을 확인합시다.");
+		System.out.println("바나나 수 랭킹 매 주 월요일 포인트 지급.");
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Answer> chooseRank = integrationService.listChooseCountRanking(map);
@@ -350,36 +423,36 @@ public class IntegrationController {
 		Banana choose3 = new Banana();
 		
 		//채택랭킹 1위
-		choose1.setBananaEmail(chooseRank.get(0).getAnswerWriter());
+		user.setEmail(chooseRank.get(0).getEmail());
+		choose1.setBananaEmail(user);
 		choose1.setBananaAmount(100);
 		choose1.setBananaHistory("채택수 랭킹 1위로 인한 포인트 지급");
 		choose1.setBananaCategory("1");
 		bananaService.addBanana(choose1);
-		user.setEmail(chooseRank.get(0).getAnswerWriter().getEmail());
+		user.setEmail(chooseRank.get(0).getEmail());
 		user.setBananaCount(100);
 		bananaService.updateAcquireBanana(user);
 		//채택랭킹 2위
-		choose2.setBananaEmail(chooseRank.get(1).getAnswerWriter());
+		user.setEmail(chooseRank.get(1).getEmail());
+		choose2.setBananaEmail(user);
 		choose2.setBananaAmount(50);
 		choose2.setBananaHistory("채택수 랭킹 2위로 인한 포인트 지급");
 		choose2.setBananaCategory("1");
 		bananaService.addBanana(choose2);
-		user.setEmail(chooseRank.get(1).getAnswerWriter().getEmail());
+		user.setEmail(chooseRank.get(1).getEmail());
 		user.setBananaCount(50);
 		bananaService.updateAcquireBanana(user);
 		//채택랭킹 3위
-		choose2.setBananaEmail(chooseRank.get(2).getAnswerWriter());
+		user.setEmail(chooseRank.get(2).getEmail());
+		choose2.setBananaEmail(user);
 		choose2.setBananaAmount(30);
 		choose2.setBananaHistory("채택수 랭킹 3위로 인한 포인트 지급");
 		choose2.setBananaCategory("1");
 		bananaService.addBanana(choose3);
-		user.setEmail(chooseRank.get(2).getAnswerWriter().getEmail());
+		user.setEmail(chooseRank.get(2).getEmail());
 		user.setBananaCount(30);
 		bananaService.updateAcquireBanana(user);
 		
-		
-		
-
 	}
 	
 	// 정지 회원 자동 복구
@@ -411,7 +484,6 @@ public class IntegrationController {
 		for(int i = 0; i <= list.size(); i++) {
 			if(list.get(i).getSuspendEndDate().equals(today)){
 				try {
-					System.out.println("여기 이제 업데이트 시작");
 					adminService.updateUserRestore(list.get(i).getEmail());
 				} catch (IndexOutOfBoundsException e){
 					
@@ -423,6 +495,7 @@ public class IntegrationController {
 		
 	}
 	
+	//공부시간 메소드
 	@ResponseBody
 	@PostMapping("setTargetTime")
 	public String setTargetTime(@RequestBody User user) throws Exception {

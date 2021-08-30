@@ -11,10 +11,8 @@
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  
+ 
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    
-  
   <script src="https://kit.fontawesome.com/e3409dba93.js" crossorigin="anonymous"></script>
 
 <style>
@@ -24,33 +22,12 @@
 
 body, table, div, p, th, td {
 	font-family: 'Do Hyeon', sans-serif;
+	font-size: 20px;
 }
 </style>
 
 <script type="text/javascript">
    		$(function(){
-  			$( "a:contains('삭제')").on("click", function(){
-				
-  				var bananaNo = $(this).find('input').val()
-  				
-  				$.ajax({
-  					
-  					url : "/banana/json/deleteBanana/"+bananaNo,
-  					method : "GET" ,
-  					dataType : "json" ,
-  					headers : {
-  						"Accept" : "application/json",
-  						"Content-Type" : "application/json"
-  					},
-  					success : function(JSONData, status){
-  						
-  					}
-  				});
-  				alert("삭제가 완료되었습니다.")
-  				$("#divRemove").remove();
-		 	});
-  		
-  		
   			
 		/* var email = ${banana.bananaEmail.email}; */
 		}); 	  		
@@ -111,9 +88,7 @@ body, table, div, p, th, td {
 									+ '</div>'
 									+ '</div>'
 									+ '<div class="col-8" style="">'
-									+ '<div class="form-group" id="deleteBanana" style="text-align: right; margin-bottom: 0.5rem; ">'
-									+ '<a>삭제<input type="hidden" value="${banana.bananaNo}" name="bananaNo"/></a>'
-									+ '</div>'
+									+ '<br>'
 									+ '<div class="form-group" style="text-align: left; ">'
 									+ list.bananaHistory
 									+ '</div>'
@@ -129,7 +104,7 @@ body, table, div, p, th, td {
 			            <div class="form-group" style="text-align: left; float:right; display:inline-block; font-size:30px">+${banana.bananaAmount}</div>
 		            </c:if>
 		            <c:if test="${banana.bananaCategory == '2'}">
-			            <div class="form-group" style="text-align: left; float:right; display:inline-block; font-size:30px">-${banana.bananaAmount}</div>
+			            <div class="form-group" style="text-align: left; float:right; display:inline-block; font-size:30px">${banana.bananaAmount}</div>
 		            </c:if>						
 						
 						
@@ -154,7 +129,7 @@ body, table, div, p, th, td {
   
 </head>
 <body class="hold-transition sidebar-mini">
-
+<jsp:include page="../userView/getProfile.jsp" />
 <jsp:include page="../common/toolbar.jsp" />
 <div class="wrapper" style="margin-top:20px;">
 
@@ -170,12 +145,12 @@ body, table, div, p, th, td {
               <div class="card-body box-profile">
               <c:if test="${empty user.userImage}">
                 <div class="text-center">                	
-                	  <img class="profile-user-img img-fluid img-circle" src="/resources/images/basic.jpg" alt="User profile picture">
+                	  <img class="profile-user-img img-fluid img-circle" src="/resources/upload_files/user_images/basic.jpg" alt="User profile picture">
                 </div>
               </c:if>
-              <c:if test="${user.userImage}">
+              <c:if test="${!empty user.userImage}">
                 <div class="text-center">                	
-                	  <img class="profile-user-img img-fluid img-circle" src="/resources/images/${user.userImage}" alt="User profile picture">
+                	  <img class="profile-user-img img-fluid img-circle" src="/resources/upload_files/user_images/${user.userImage}" alt="User profile picture">
                 </div>
               </c:if>              
 		<!-- <img class="profile-user-img img-fluid img-circle" src="/resources/image/basic.jpg" alt="User profile picture"> -->
@@ -194,7 +169,7 @@ body, table, div, p, th, td {
                     <b>바나나포인트</b> <a class="float-right">${user.bananaCount} 바나나</a>
                   </li>
                 </ul>
-                <a href="#" class="btn btn-primary btn-block" style="background-color:#FFDC3C; border-color:#FFF">
+                <a href="#" class="btn btn-primary btn-block" style="background-color:#FFDC3C; border-color:#FFF" data-toggle="modal" data-target="#getProfile">
                 	<b id="myprofile">
                 		내프로필
                 	</b>
@@ -225,12 +200,7 @@ body, table, div, p, th, td {
             </c:if>            
           </div>
           <div class="col-8" style="">
-            <div class="form-group" id="deleteBanana" style="text-align: right; margin-bottom: 0.5rem; ">
-            	
-             <a>내역삭제
-             	<input type="hidden" value="${banana.bananaNo}" name="bananaNo"/>
-             </a>
-            </div>
+            <br>
                      
             <div class="form-group" style="text-align: left; ">
               ${banana.bananaHistory} 
@@ -240,7 +210,7 @@ body, table, div, p, th, td {
 	            <div class="form-group" style="text-align: left; float:right; display:inline-block; font-size:30px">+${banana.bananaAmount}</div>
             </c:if>
             <c:if test="${banana.bananaCategory == '2'}">
-	            <div class="form-group" style="text-align: left; float:right; display:inline-block; font-size:30px">-${banana.bananaAmount}</div>
+	            <div class="form-group" style="text-align: left; float:right; display:inline-block; font-size:30px">${banana.bananaAmount}</div>
             </c:if>
                         
             <div class="form-group" style="text-align: left; ">

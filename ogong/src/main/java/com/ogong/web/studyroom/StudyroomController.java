@@ -113,7 +113,7 @@ public class StudyroomController {
 		
 		
 		if(file.getOriginalFilename().equals("")) {    //파일 선택안했을때
-			study.setStudyThumbnail("ogong2.jpg");
+			study.setStudyThumbnail(study.getStudyThumbnail());
 		}else {
 			String root_path = request.getSession().getServletContext().getRealPath("/");  
 			String attach_path = "resources/upload_files/study/";

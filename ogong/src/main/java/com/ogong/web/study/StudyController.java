@@ -142,7 +142,6 @@ public class StudyController {
 			
 			gsm.setStudy(study);
 			gsm.setMember(user);
-			gsm.setStudyRole("1");
 			gsm.setApprovalFlag("1");
 			studyService.addParticipation(gsm);
 			
@@ -216,7 +215,7 @@ public class StudyController {
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
-		
+		search.setStudyEndFlag(1);		
 		Map<String, Object> map = studyService.getStudyList(search);
 		System.out.println("map : "+map);
 		

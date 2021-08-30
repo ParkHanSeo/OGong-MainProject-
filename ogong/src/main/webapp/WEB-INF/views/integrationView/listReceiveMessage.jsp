@@ -9,8 +9,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-	
-
   <!-- Theme style -->
   <link rel="stylesheet" href="/resources/css/hanjee/adminlte.min.css">
   
@@ -20,22 +18,17 @@
   <script src="https://kit.fontawesome.com/e3409dba93.js" crossorigin="anonymous"></script>
   
 	<style>
- 
-		
- 		@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Serif+KR:wght@600&family=Sunflower:wght@300&display=swap');
-		
-		body, 
-		table, 
-		div, 
-		p, 
-		th, 
-		td{
-		font-family: 'Do Hyeon', sans-serif;
-		font-size: 16px;
-		}
-		
-				
-   	</style>  
+@import
+	url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Serif+KR:wght@600&family=Sunflower:wght@300&display=swap')
+	;
+
+body, table, div, p, th, td {
+	font-family: 'Do Hyeon', sans-serif;
+	font-size: 16px;
+}
+
+
+</style>  
 	<script type="text/javascript">
 	function fncGetList(currentPage) {
 		$("#currentPage").val(currentPage)
@@ -64,6 +57,9 @@
 	 	$( "a:contains('받은쪽지함')" ).on("click" , function() {
 	 		location.href = "/integration/listReceiveMessage";
 		});
+	 	$( "a:contains('쪽지보관함')" ).on("click" , function() {
+	 		location.href = "/integration/listKeepMessage";
+		});	 	
 	 	
 
 	 	
@@ -92,9 +88,9 @@
 					$("#birth").html(JSONData.birth);
 					$("#goal").html(JSONData.goal);
 					if(JSONData.userImage != null){
-						$("#image").html("<img  src='/resources/images/"+JSONData.userImage+"' alt='User profile picture'>")	
+						$("#image").html("<img id='userImage' src='/resources/upload_files/user_images/"+JSONData.userImage+"' alt='User profile picture'>")	
 					}else{
-						$("#image").html("<img  src='/resources/images/basic.jpg' alt='User profile picture'>");
+						$("#image").html("<img id='userImage' src='/resources/upload_files/user_images/basic.jpg' alt='User profile picture'>");
 					}
 					$("#interest1").html(JSONData.studyInterest1);
 					$("#interest2").html(JSONData.studyInterest2);
@@ -112,7 +108,31 @@
 	
 	$(function(){
 				
-		
+		$("#updateKeepMassage").on("click", function(){
+			
+			var messageArr = new Array();
+			
+		 	 $("input[class='messageNo']:checked").each(function(){
+	 		 		messageArr.push($(this).val());
+	 		 });
+		 	 
+		 	 $.ajax({
+		 		 	 url : "/integration/updateKeepMessage",
+		 		 	 type : "POST",
+	  		  	 	 data : { messageNo : messageArr },
+	    		 	 success : function(result){
+	   		   	 	 	if(result == 1){
+	    		 		 	location.href = "/integration/listSendMessage";
+	   		   	 	 	} else {
+	   		   	 	 		alert("보관 실패")
+	   		   	 	 	}
+	   		   	 		
+	  		  	 	}
+		 	 });
+		 	 alert("보관이 완료되었습니다.")
+		 	 
+			
+		})
 		
 		
  		$("#deletebtn").on("click" , function() {
@@ -126,7 +146,7 @@
  			 });
  		 	 
  		  		$.ajax({
-		  			 	 url : "/integration/deleteTest",
+		  			 	 url : "/integration/deleteChoiceMessage",
 			  		  	 type : "POST",
 		  		  	 	 data : { messageNo : messageArr },
 		    		 	 success : function(result){
@@ -203,7 +223,7 @@
     <section class="content">
       <div class="row">
         <div class="col-md-3">
-          <a href="compose.html" class="btn btn-primary btn-block mb-3" style="background-color:#FFDC3C; border-color:#fff;" data-toggle="modal" data-target="#myModal">쪽지보내기</a>
+          <a href="compose.html" class="btn btn-primary btn-block mb-3" style="background-color:#af945f; border-color:#fff;" data-toggle="modal" data-target="#myModal">쪽지보내기</a>
 
           <div class="card">
             <div class="card-header">
@@ -227,6 +247,11 @@
                     <i class="far fa-envelope" id="sendMessage"></i> 보낸쪽지함
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-star" id="keepMessage"></i> 쪽지보관함
+                  </a>
+                </li>                
               </ul>
             </div>
             <!-- /.card-body -->
@@ -267,6 +292,9 @@
                   <button type="button" class="btn btn-default btn-sm" name="refresh">
                     <i class="fas fa-redo"></i>
                   </button>
+                  <button type="button" class="btn btn-default btn-sm" id="updateKeepMassage" name="updateKeepMassage">
+                    <a>보관</a>
+                  </button>                  
 
                 </div>
 
@@ -374,6 +402,9 @@
                   <button type="button" class="btn btn-default btn-sm" name="refresh">
                     <i class="fas fa-redo"></i>
                   </button>
+                  <button type="button" class="btn btn-default btn-sm" id="updateKeepMassage" name="updateKeepMassage">
+                    <a>보관</a>
+                  </button>                    
 
                 </div>
                 <!-- /.btn-group -->

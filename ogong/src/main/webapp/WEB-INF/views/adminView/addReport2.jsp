@@ -24,7 +24,7 @@
 			return;
 		} 
 		
-		alert("신고가 완료되었습니다.");
+		
 		
 		$("form[name='addReport']").attr("method", "POST").attr("action", "/admin/addReport").submit();
 		
@@ -54,10 +54,10 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">신고 하기</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" id="myModalLabel">신고 하기</h4>
 					</div>
 					<div class="modal-body">
 						<form>

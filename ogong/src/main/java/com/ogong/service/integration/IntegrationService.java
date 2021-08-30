@@ -19,17 +19,26 @@ public interface IntegrationService {
 	//보낸 쪽지 조회
 	public Map<String, Object> getlistSendMessage(HashMap<String, Object> map) throws Exception;
 	
-	//쪽지 보내기 (1)
+	//쪽지 보관함 조회
+	public Map<String, Object> getlistKeepMessage(HashMap<String, Object> map) throws Exception;
+	
+	//쪽지 보내기 (1 = 쪽지목록에서 쪽지보내기)
 	public void addSendMessage(Message message) throws Exception;
 	
-	//쪽지 보내기 (2)
+	//쪽지 보내기 (2 = 모든 목록에서 다른사람 닉네임을 통해 쪽지보내기)
 	public void addSendMessage2(Message message) throws Exception;
 	
 	//쪽지 삭제
 	public void deleteMessage(int messageNo) throws Exception;
 	
-	//쪽지 삭제 테스트
-	public void deleteTest(Message message) throws Exception;
+	//쪽지 선택 삭제
+	public void deleteChoiceMessage(Message message) throws Exception;
+	
+	//쪽지 보관함 이동
+	public void updateKeepMessage(int messageNo) throws Exception;
+	
+	//받은 쪽지함 이동
+	public void updateReceiveMessage(int messageNo) throws Exception;
 	
 	//알림
 	public void addNotice(Notice notice) throws Exception;
@@ -58,7 +67,7 @@ public interface IntegrationService {
 	//알림 읽음 표시
 	public void updateNotice(String email) throws Exception;
 	
-	//알림 카운트
+	//알림 카운트 수
 	int getNoticeCount (String email) throws Exception;
 	
 	//목표시간 설정

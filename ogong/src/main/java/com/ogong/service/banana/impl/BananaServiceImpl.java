@@ -20,7 +20,7 @@ public class BananaServiceImpl implements BananaService{
 	@Autowired
 	BananaMapper bananaMapper;
 
-	
+	//바나나 지급
 	@Override
 	public void addBanana(Banana banana) throws Exception {
 
@@ -28,6 +28,7 @@ public class BananaServiceImpl implements BananaService{
 		
 	}
 
+	//획득, 소모 바나나 목록
 	@Override
 	public Map<String, Object> getlistBanana(HashMap<String, Object> map) throws Exception {
 
@@ -41,7 +42,8 @@ public class BananaServiceImpl implements BananaService{
 		return result;
 		
 	}
-
+	
+	//바나나 + 획득
 	@Override
 	public void updateUseBanana(User user) throws Exception {
 
@@ -49,6 +51,7 @@ public class BananaServiceImpl implements BananaService{
 		
 	}
 	
+	//바나나 - 사용
 	@Override
 	public void updateAcquireBanana(User user) throws Exception {
 
@@ -56,12 +59,14 @@ public class BananaServiceImpl implements BananaService{
 		
 	}
 	
+	//바나나 목록 삭제
 	@Override
 	public void deleteBanana(int bananaNo) throws Exception{
 		
 		bananaMapper.deleteBanana(bananaNo);
 	}
 	
+	//회원 정보 조회
 	@Override
 	public User adminGetUser(String email) throws Exception {
 		return bananaMapper.adminGetUser(email);

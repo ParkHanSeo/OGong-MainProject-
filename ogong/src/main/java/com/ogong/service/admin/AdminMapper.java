@@ -37,7 +37,7 @@ public interface AdminMapper {
 	//신고목록 페이지 수
 	int getReportTotalCount(HashMap<String, Object> map);
 	
-	//신고된 사용자 페이지
+	//신고된 사용자 페이지 수
 	int getUserReportTotalCount(HashMap<String, Object> map);
 	
 	//유저 페이지 수

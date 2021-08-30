@@ -64,6 +64,9 @@
 	 	$( "a:contains('받은쪽지함')" ).on("click" , function() {
 	 		location.href = "/integration/listReceiveMessage";
 		});
+	 	$( "a:contains('쪽지보관함')" ).on("click" , function() {
+	 		location.href = "/integration/listKeepMessage";
+		});	 		 	
 	 	
  	
 	})
@@ -128,7 +131,7 @@
  			 });
  		 	 
  		  		$.ajax({
-		  			 	 url : "/integration/deleteTest",
+		  			 	 url : "/integration/deleteChoiceMessage",
 			  		  	 type : "POST",
 		  		  	 	 data : { messageNo : messageArr },
 		    		 	 success : function(result){
@@ -198,7 +201,7 @@
     <section class="content">
       <div class="row" style="padding-top:7px">
         <div class="col-md-3">
-          <a href="compose.html" class="btn btn-primary btn-block mb-3" style="background-color:#FFDC3C; border-color:#fff;" data-toggle="modal" data-target="#myModal">쪽지보내기</a>
+          <a href="compose.html" class="btn btn-primary btn-block mb-3" style="background-color:#af945f; border-color:#fff;" data-toggle="modal" data-target="#myModal">쪽지보내기</a>
 
           <div class="card">
             <div class="card-header">
@@ -222,6 +225,11 @@
                     <i class="far fa-envelope" id="sendMessage"></i> 보낸쪽지함
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-star" id="keepMessage"></i> 쪽지보관함
+                  </a>
+                </li>                 
               </ul>
             </div>
             <!-- /.card-body -->
@@ -262,7 +270,6 @@
                   <button type="button" class="btn btn-default btn-sm" name="refresh">
                     <i class="fas fa-redo"></i>
                   </button>
-
                 </div>
                 
                 
@@ -311,7 +318,7 @@
 									${message.receiver.email}
 								</a>
 								  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-								    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#getMyProfile">프로필보기
+								    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal">프로필보기
 								    <input type="hidden" value="${message.receiver.email}" /></a></li>
 								    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal2">쪽지보내기
 								    <input type="hidden" value="${message.receiver.email}" /></a></li>
@@ -363,7 +370,7 @@
 									</script>
 							</div>
 						</div>                
-                  <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#exampleModal">
+                  <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">
                     <i class="far fa-trash-alt"></i>
                   </button>
                   <button type="button" class="btn btn-default btn-sm" name="refresh">

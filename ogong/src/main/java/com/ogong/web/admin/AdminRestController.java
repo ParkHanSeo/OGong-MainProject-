@@ -27,6 +27,7 @@ public class AdminRestController {
 		System.out.println(this.getClass());
 	}
 	
+	//회원 복구 메소드
 	@GetMapping( value="json/updateUserRestore/{email}")
 	public void updateUserResotore(@PathVariable("email") String email) throws Exception{
 		System.out.println("updateUserResotore : GET");
@@ -34,6 +35,7 @@ public class AdminRestController {
 		adminService.updateUserRestore(email);
 	}
 	
+	//회원 정보 조회 메소드
 	@GetMapping( value="json/adminGetUser/{email}")
 	public User adminGetUser(@PathVariable("email")String email) throws Exception{
 		

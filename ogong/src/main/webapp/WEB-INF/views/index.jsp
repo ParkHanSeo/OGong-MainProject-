@@ -117,7 +117,7 @@
                             <img class="img-fluid" src="../resources/images/1.jpg" alt="..." />
                             <div class="portfolio-box-caption">
                                 <div class="project-category text-white-50">누구나 자유롭게 참여가 가능한</div>
-                                <div class="project-name">자유스터디</div>
+                                <div class="project-name">자율스터디</div>
                             </div>
                         </a>
                     </div>
@@ -146,7 +146,7 @@
         <section class="page-section bg-dark text-white">
             <div class="container px-4 px-lg-5 text-center">
                 <h2 class="mb-4">스터디 시작하기</h2>
-                <a class="btn btn-light btn-xl" href="/">Study Now</a> 
+                <a class="btn btn-light btn-xl" href="/user/loginView">Study Now</a> 
             </div>
         </section>
         <!-- Contact-->

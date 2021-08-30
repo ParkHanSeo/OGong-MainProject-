@@ -25,7 +25,7 @@ element.style {
 }
 body {
     color: #333;
-	background: #EEE;
+	background: #f8fbff;
     font-family: 'Ruda', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
@@ -245,7 +245,7 @@ ul.top-menu > li > .logout {
     width: 210px;
     height: 100%;
     position: fixed;
-    background: #eee;
+    background: #f8fbff;
 }
 
 #sidebar h5 {
@@ -379,7 +379,7 @@ ul.sidebar-menu li a{
 }
 
 ul.sidebar-menu li a.active, ul.sidebar-menu li a:hover, ul.sidebar-menu li a:focus {
-    background: #f19347;
+    background: powderblue;
     color: #fff;
     display: block;
 
@@ -428,7 +428,7 @@ ul.sidebar-menu li a.active i {
 }
 
 .black-bg {
-    background: #f19347;
+    background: powderblue;
     border-bottom: 1px solid #eee;
 }
 
@@ -779,7 +779,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 /* Dash Side */
 
 .ds {
-    background: #eee;
+    background: #f8fbff;
     padding-top: 20px;
     position: relative;
     margin-top: 100px;
@@ -792,13 +792,13 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 }
 
 .ds h3 {
-    color: #333;
+    color: #ffffff;
     font-size: 16px;
     padding: 0 10px;
     line-height: 60px;
     height: 60px;
     margin: 0;
-    background: #f19347;
+    background: powderblue;
     text-align: center;
     -webkit-border-radius: 4px;
 }

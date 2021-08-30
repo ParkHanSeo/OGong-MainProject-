@@ -19,6 +19,7 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	AdminMapper adminMapper;
 	
+	//신고하기
 	@Override
 	public void addReport(Report report) throws Exception{
 		
@@ -26,6 +27,7 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 	
+	//신고 목록
 	@Override
 	public Map<String, Object> getlistReport(HashMap<String, Object> map) throws Exception {
 
@@ -39,6 +41,7 @@ public class AdminServiceImpl implements AdminService {
 		return result;
 	}
 	
+	//신고된 사용자 목록
 	@Override
 	public Map<String, Object> getlistUserReport(HashMap<String, Object> map) throws Exception{
 		
@@ -53,7 +56,7 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 	
-
+	//모든 회원 목록
 	@Override
 	public Map<String, Object> getlistTotalUser(HashMap<String, Object> map) throws Exception {
 		List<User> list= adminMapper.getlistTotalUser(map);
@@ -66,12 +69,14 @@ public class AdminServiceImpl implements AdminService {
 		return result;
 	}
 	
+	//회원 정지
 	@Override
 	public void updateUserSuspend(Report report) throws Exception {
 		adminMapper.updateUserSuspend(report);
 		
 	}
-
+	
+	//회원 복구
 	@Override
 	public void updateUserRestore(String email) throws Exception {
 		adminMapper.updateUserRestore(email);

@@ -15,19 +15,19 @@ import com.ogong.service.domain.User;
 @Mapper
 public interface BananaMapper {
 
-	//바나나 인서트
+	//바나나 지급
 	public int addBanana(Banana banana);
 	
-	//획득한 바나나 목록
+	//획득,소모 바나나 목록
 	List<Banana> getlistBanana(HashMap<String, Object> map);
 	
-	//바나나 +획득
+	//바나나 + 획득
 	void updateAcquireBanana(User user);
 	
-	//바나나 -차감
+	//바나나 - 사용
 	void updateUseBanana(User user);
 	
-	//바나나 리스트 삭제
+	//바나나 목록 삭제
 	public void deleteBanana(int bananaNo);
 	
 	//바나나 페이지 카운트	

@@ -41,34 +41,34 @@ body {
 </style>
 <script type="text/javascript">
 
-	$(function (){
-		
-		
-		$("#roomMain").on("click", function(){
-			self.location = "/studyroom/getStudyRoom?studyNo="+${studyNo}
-		});
-		
-		$("#updateInfo").on("click", function(){
-			self.location = "/studyroom/updateStudy?studyNo="+${studyNo}
-		});
-		
-		$("#applyMemberList").on("click", function(){
-			self.location = "/studyroom/listParticipation?studyNo="+${studyNo}
-		});
-		
-		$("#MemberList").on("click", function(){
-			self.location = "/studyroom/listGSMember?studyNo="+${studyNo}
-		});
-		
-		
-		$(".logo").on("click", function(){
-			self.location = "/studyroom/getStudyRoom?studyNo="+${studyNo}
-		})
-		
-		$(".logout").on("click", function(){
-			self.location = "/integration/mainPage"
-		})
-	});
+   $(function (){
+      
+      
+      $("#roomMain").on("click", function(){
+         self.location = "/studyroom/getStudyRoom?studyNo="+${studyNo}
+      });
+      
+      $("#updateInfo").on("click", function(){
+         self.location = "/studyroom/updateStudy?studyNo="+${studyNo}
+      });
+      
+      $("#applyMemberList").on("click", function(){
+         self.location = "/studyroom/listParticipation?studyNo="+${studyNo}
+      });
+      
+      $("#MemberList").on("click", function(){
+         self.location = "/studyroom/listGSMember?studyNo="+${studyNo}
+      });
+      
+      
+      $(".logo").on("click", function(){
+         self.location = "/studyroom/getStudyRoom?studyNo="+${studyNo}
+      })
+      
+      $(".logout").on("click", function(){
+         self.location = "/integration/mainPage"
+      })
+   });
 
 </script>
 
@@ -84,9 +84,9 @@ body {
             <a href="#" class="logo"><b>STUDY ROOM</b></a>
             <!--logo end-->
             <div class="top-menu">
-            	<ul class="nav pull-right top-menu">
+               <ul class="nav pull-right top-menu">
                     <li><a class="logout" href="#">메인 화면 이동</a></li>
-            	</ul>
+               </ul>
             </div>
         </header>
       <!--header end-->
@@ -100,8 +100,8 @@ body {
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
               
-              	  <p class="centered"><img src="/resources/images/ogong2.png" class="img-circle" width="150"></p>
-              	  	<!-- class="active" -->
+                   <p class="centered"><img src="/resources/images/ogong2.png" class="img-circle" width="150"></p>
+                      <!-- class="active" -->
                   <li class="mt">
                       <a  id="roomMain" href="#">
                           <span>스터디룸 홈</span>
@@ -109,15 +109,15 @@ body {
                           <input type="hidden" id="email" value="${user.email}">
                       </a>
                   </li>
-				
-				<c:if test="${study.studyMaker.email == user.email}"> 
+            
+            <c:if test="${study.studyMaker.email == user.email}"> 
                  
-           		  <li class="sub-menu">
+                   <li class="sub-menu">
                       <a href="#" id="updateInfo" >
                           <span>스터디룸 정보 수정</span>
                       </a>
                   </li>
-				 
+             
                   <li class="sub-menu">
                       <a href="#" id="applyMemberList">
                           <span>스터디룸 참가신청 회원 목록</span>

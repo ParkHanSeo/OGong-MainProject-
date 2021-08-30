@@ -53,7 +53,7 @@ public class IntegrationRestController {
 	}
 	
 	
-	//
+	//알림 읽음처리 메소드
 	@GetMapping(value="json/updateNotice/{email}")
 	public void updateNotice(@PathVariable("email") String email) throws Exception {
 		
@@ -61,7 +61,7 @@ public class IntegrationRestController {
 		integrationService.updateNotice(email);
 	}
 	
-	
+	//알림 삭제 메소드
 	@GetMapping(value="json/deleteNotice/{noticeNo}")
 	public void deleteNotice(@PathVariable("noticeNo")int noticeNo) throws Exception {
 		
@@ -70,6 +70,7 @@ public class IntegrationRestController {
 		integrationService.deleteNotice(noticeNo);
 	}
 	
+	//알림 전체삭제 메소드
 	@GetMapping(value="json/deleteNoticeAll/{email}")
 	public void deleteAllNotice(@PathVariable("email")String email) throws Exception {
 		
@@ -78,24 +79,24 @@ public class IntegrationRestController {
 		integrationService.deleteAllNotice(email);
 	}
 	
+	//쪽지 삭제 메소드
 	@GetMapping(value="json/deleteMessage/{messageNo}")
 	public void deleteMessage(@PathVariable("messageNo") int messageNo) throws Exception{
 		
 		integrationService.deleteMessage(messageNo);
 	}
 	
+	//나의 프로필을 볼 수 있는 메소드
 	@GetMapping(value="json/getMyProfile/{email}")
 	public User	getMyProfile(@PathVariable("email") String email) throws Exception{
-		
-		
-		
+
 		return bananaService.adminGetUser(email);
 	}
 	
 	
 	
 	
-	/* @PostMapping(value="json/deleteMessage/{email}") */
+	
 }
 
 

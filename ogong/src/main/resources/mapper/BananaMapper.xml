@@ -38,6 +38,47 @@
 		<result property="studyInterest3"				 column="STUDY_INTEREST3"    jdbcType="VARCHAR"/>
 	</resultMap>	
 	
+
+	<!-- 바나나 지급 -->
+	<insert id="addBanana"	parameterType="banana" useGeneratedKeys="true" keyColumn="banana_info_no" keyProperty="bananaNo">
+		INSERT
+		INTO BANANA_INFO (banana_info_no
+					,banana_email
+					,banana_amount
+					,banana_history_date
+					,banana_history
+					,banana_category)
+			VALUES	(seq_banana_info_no.nextVal
+					,#{bananaEmail.email:VARCHAR}
+					,#{bananaAmount:NUMERIC}
+					,SYSDATE
+					,#{bananaHistory:VARCHAR}
+					,#{bananaCategory:VARCHAR}
+					)
+	</insert>
+	
+	<!-- 바나나 소모,획득 목록 -->
+	<select id="getlistBanana" parameterType="hashmap" resultMap="BananaSelectMap">
+		SELECT outer_table.*
+		FROM ( SELECT 
+			   inner_table.* , ROWNUM AS row_seq
+						FROM		( SELECT b.banana_info_no,
+											 b.banana_email,
+											 b.banana_history,
+											 TO_CHAR(b.banana_history_date,'YYYY-MM-DD HH24:MI:SS') banana_history_date,
+											 b.banana_amount,
+											 b.banana_category,
+											 u.banana_count
+											 FROM users u, banana_info b
+										  	 WHERE u.email = b.banana_email
+											 AND  b.banana_email = #{banana.bananaEmail.email}
+											 ORDER BY banana_history_date DESC
+											 ) inner_table
+						   				WHERE ROWNUM &lt;= #{search.endRowNum}) outer_table
+									WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+	</select>
+	
+	
 	<!-- 회원 상세보기 -->
 	<select id="adminGetUser"	parameterType="string"	resultMap="UserSelectMap">
 		SELECT
@@ -64,69 +105,9 @@
 		study_interest3
 		FROM users
 		WHERE email = #{value}
-		
-		
 	</select>
 	
-	
-	<!-- 바나나 인서트 -->
-	<insert id="addBanana"	parameterType="banana" useGeneratedKeys="true" keyColumn="banana_info_no" keyProperty="bananaNo">
-		INSERT
-		INTO BANANA_INFO (banana_info_no
-					,banana_email
-					,banana_amount
-					,banana_history_date
-					,banana_history
-					,banana_category)
-			VALUES	(seq_banana_info_no.nextVal
-					,#{bananaEmail.email:VARCHAR}
-					,#{bananaAmount:NUMERIC}
-					,SYSDATE
-					,#{bananaHistory:VARCHAR}
-					,#{bananaCategory:VARCHAR}
-					)
-	</insert>
-	
-	<select id="getlistBanana" parameterType="hashmap" resultMap="BananaSelectMap">
-		SELECT outer_table.*
-		FROM ( SELECT 
-			   inner_table.* , ROWNUM AS row_seq
-						FROM		( SELECT b.banana_info_no,
-											 b.banana_email,
-											 b.banana_history,
-											 TO_CHAR(b.banana_history_date,'YYYY-MM-DD HH24:MI:SS') banana_history_date,
-											 b.banana_amount,
-											 b.banana_category,
-											 u.banana_count
-											 FROM users u, banana_info b
-										  	 WHERE u.email = b.banana_email
-											 AND  b.banana_email = #{banana.bananaEmail.email}
-											 ORDER BY banana_history_date
-											 ) inner_table
-						   				WHERE ROWNUM &lt;= #{search.endRowNum}) outer_table
-									WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}
-	</select>
-	
-	
-<!-- 	<select id="getlistUseBanana" parameterType="hashmap" resultMap="BananaSelectMap">
-		SELECT outer_table.*
-		FROM ( SELECT 
-			   inner_table.* , ROWNUM AS row_seq
-						FROM		( SELECT b.banana_email,
-											 b.banana_history,
-											 TO_CHAR(b.banana_history_date,'YYYY-MM-DD') banana_history_date,
-											 b.banana_amount,
-											 b.banana_category
-											 FROM users u, banana_info b
-										  	 WHERE u.email = b.banana_email
-											 AND    b.banana_category = 2
-											 AND  b.banana_email = #{banana.bananaEmail.email}
-											  ) inner_table
-						   				WHERE ROWNUM &lt;= #{search.endRowNum}) outer_table
-									WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}
-	</select>	 -->
-	
-
+	<!-- 바나나 획득 -->
 	<update id="updateAcquireBanana" parameterType="user">
 		UPDATE users
 		
@@ -135,6 +116,7 @@
 		WHERE email = #{email:VARCHAR}
 	</update>	
 	
+	<!-- 바나나 사용 -->
 	<update id="updateUseBanana" parameterType="user">
 		UPDATE users
 		<set>
@@ -143,6 +125,7 @@
 		WHERE email = #{email:VARCHAR}
 	</update>
 	
+	<!-- 바나나 목록 삭제 -->
 	<delete id="deleteBanana" parameterType="int">
 		DELETE
 		FROM banana_info
@@ -165,22 +148,6 @@
 											 
 											 ) countTable
 	</select>	
-	
-<!-- 	<select id="getUseCount"		parameterType="hashmap"		resultType="int">
-		SELECT COUNT(*)
-						FROM		( SELECT b.banana_email,
-											 b.banana_history,
-											 TO_CHAR(b.banana_history_date,'YYYY-MM-DD') banana_history_date,
-											 b.banana_amount,
-											 b.banana_category
-											 FROM users u, banana_info b
-										  	 WHERE u.email = b.banana_email
-											 AND    b.banana_category = 2
-											 AND  b.banana_email = #{banana.bananaEmail.email}
-											 ) countTable
-	</select>	 -->
-	
-	
 	
 </mapper>
 

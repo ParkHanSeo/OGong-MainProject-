@@ -24,6 +24,14 @@ font-size: 15px;
 	width: 300px;
 	height: 300px;
 }
+.img_wrap {
+	width: 300px;
+	margin-top: 50px;
+}
+
+.img_wrap img {
+	max-width: 100%;
+}
 </style>
     
 
@@ -50,7 +58,7 @@ $(function() {
 function handleImgFileSelect(e) {
     var files = e.target.files;
     var filesArr = Array.prototype.slice.call(files);
-
+	$("#studyThumbnail").remove();
     filesArr.forEach(function(f) {
         if(!f.type.match("image.*")) {
             alert("확장자는 이미지 확장자만 가능합니다.");
@@ -123,6 +131,7 @@ function handleImgFileSelect(e) {
 
 				<div class="form-group">
 					<label for="studyThumbnail">스터디 썸네일</label>
+					<input type="hidden" name="studyThumbnail" value="${study.studyThumbnail}">
 					<img  id="studyThumbnail" src="/resources/upload_files/study/${study.studyThumbnail}">
 					<div class="input-group mb-3">
 						<div class="custom-file col-sm-4">

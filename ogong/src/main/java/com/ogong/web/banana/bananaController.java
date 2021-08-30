@@ -23,25 +23,31 @@ import com.ogong.service.user.UserService;
 @Controller
 @RequestMapping("/banana/*")
 public class bananaController {
-
+	
+	//Filed
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
 	private BananaService bananaService;	
 	
+	//Constructor
 	public bananaController() {
 		System.out.println(this.getClass());
 	}
 	
+	//Method
+	
+	//바나나 소모,획득 목록 메소드
 	@RequestMapping(value="listBanana")
 	public String listBanana(@ModelAttribute("search") Search search, 
 							HttpSession session, Model model, Banana banana)throws Exception {
 		System.out.println("/bananaController/listBanana : GET");
 		
-		int pageSize = 3;
+		int pageSize = 4;
 		int pageUnit = 5;
 		
+		//페이지
 		if(search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}

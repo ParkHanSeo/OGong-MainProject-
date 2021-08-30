@@ -24,17 +24,26 @@ public interface IntegrationMapper {
 	//보낸 쪽지 조회
 	List<Message> getlistSendMessage(HashMap<String, Object> map);
 	
+	//쪽지 보관함
+	List<Message> getlistKeepMessage(HashMap<String, Object> map);
+	
 	//쪽지 보내기(1)
 	public int addSendMessage(Message message);
 	
 	//쪽지 보내기(2)
 	public int addSendMessage2(Message message);
 	
-	//쪽지 삭제
+	//쪽지 삭제(1)
 	public void deleteMessage(int messageNo);
 	
-	//쪽지 삭제 테스트
-	public void deleteTest(Message message);
+	//쪽지 선택 삭제
+	public void deleteChoiceMessage(Message message);
+	
+	//쪽지 보관함으로 이동
+	public void updateKeepMessage(int messageNo);
+	
+	//쪽지 받은함으로 이동
+	public void updateReceiveMessage(int messageNo);
 	
 	//알림
 	public void addNotice(Notice notice);
@@ -69,6 +78,7 @@ public interface IntegrationMapper {
 	//페이지 수
 	int getTotalCount(HashMap<String, Object> map);
 	int getTotalCount2(HashMap<String, Object> map);
+	int getTotalCount3(HashMap<String, Object> map);
 	
 	//목표시간 설정
 	void setTargetTime(User user);

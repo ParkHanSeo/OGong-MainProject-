@@ -4,7 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
     
 <!-- 쪽지 보내기 JSP 시작 -->
-
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
 	<script type="text/javascript">
 
 	
@@ -26,7 +27,7 @@
 			return;
 		} 
 		
-		alert("쪽지를 성공적으로 보냈습니다.");
+
 		
 		$("form[name='addSendMessage3']").attr("method", "POST").attr("action", "/integration/addSendMessage").submit();
 		
@@ -64,10 +65,10 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">쪽지 보내기</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" id="myModalLabel">쪽지 보내기</h4>
 					</div>
 					<div class="modal-body">
 						<form>
