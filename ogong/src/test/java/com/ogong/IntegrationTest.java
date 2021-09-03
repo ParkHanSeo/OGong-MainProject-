@@ -133,7 +133,7 @@ public class IntegrationTest {
 		message.setReceiver(user);
 		message.setMessageNo(10033);
 		
-		integrationService.deleteTest(message);
+		integrationService.deleteChoiceMessage(message);
 	}
 	
 	//@Test
